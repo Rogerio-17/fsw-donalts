@@ -44,3 +44,14 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Remover a barra de rolagem para navegadores baseados em WebKit */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Remover a barra de rolagem para navegadores que suportam scrollbar-width */
+body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
