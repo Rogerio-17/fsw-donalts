@@ -1,5 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { formatCurrency } from "@/utils/format-currency"
 import { Product, Restaurant } from "@prisma/client"
 import { ChefHatIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
@@ -29,8 +30,8 @@ export function ProductDetails({ product, restaurant }: ProductDetailsProps) {
     }
 
     return (
-        <div className="relative z-50 mt-[1.5rem] rounded-t-3xl p-5 flex flex-auto flex-col">
-            <div className="flex-auto">
+        <div className="relative z-50 mt-[1.5rem] rounded-t-3xl p-5 flex flex-auto flex-col overflow-hidden">
+            <div className="flex-auto overflow-hidden">
                 {/* RESTAURANTE */}
                 <div className="flex items-center gap-1.5">
                     <Image
@@ -52,7 +53,7 @@ export function ProductDetails({ product, restaurant }: ProductDetailsProps) {
                 </h2>
 
                 {/* PREÇO E QUANTIDADE */}
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between mt-3">
                     <h3 className="text-xl font-semibold">
                         {
                             formatCurrency(product.price)
@@ -78,23 +79,35 @@ export function ProductDetails({ product, restaurant }: ProductDetailsProps) {
                     </div>
                 </div>
 
-                {/* SOBRE */}
-                <div className="mt-6 space-y-3">
-                    <h4 className="font-semibold">Sobre</h4>
-                    <p className="text-sm text-muted-foreground">{product.description}</p>
-                </div>
-
-                {/* INGREDIENTES */}
-                <div className="mt-6 space-y-3">
-                    <div className="flex items-center gap-1">
-                        <ChefHatIcon size={18} />
-                        <h4 className="font-semibold">Ingredientes</h4>
+                <ScrollArea className="h-full">
+                    {/* SOBRE */}
+                    <div className="mt-6 space-y-3">
+                        <h4 className="font-semibold">Sobre</h4>
+                        <p className="text-sm text-muted-foreground">{product.description}</p>
                     </div>
-                    <p className="text-sm text-muted-foreground">{product.description}</p>
-                </div>
+
+                    {/* INGREDIENTES */}
+                    {
+                        product.ingredients.length > 0 && (
+                            <div className="mt-6 space-y-3">
+                                <div className="flex items-center gap-1">
+                                    <ChefHatIcon size={18} />
+                                    <h4 className="font-semibold">Ingredientes</h4>
+                                </div>
+                                <ul className="list-disc px-5 text-sm text-muted-foreground">
+                                    {
+                                        product.ingredients.map((ingredient, index) => (
+                                            <li key={index} className="text-sm text-muted-foreground">{ingredient}</li>
+                                        ))
+                                    }
+                                </ul>
+                            </div>
+                        )
+                    }
+                </ScrollArea>
             </div>
 
-            <Button className="mt-6 w-full rounded-full ">
+            <Button className="mt-2 w-full rounded-full ">
                 Adicionar à sacola
             </Button>
         </div>
