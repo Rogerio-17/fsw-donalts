@@ -1,6 +1,8 @@
 import { getProductById } from "@/data/get-product-by-id"
 import { notFound } from "next/navigation"
 import { ProductHeader } from "./components/product-header"
+import { ProductDetails } from "./components/product-details"
+import { getRestaurantBySlug } from "@/data/get-restaurant-by-slug"
 
 interface ProductPageProps {
     params: Promise<{
@@ -12,18 +14,26 @@ interface ProductPageProps {
 export default async function ProductPage({ params }: ProductPageProps) {
     const { productId, slug } = await params
 
+    const restaurant = await getRestaurantBySlug(slug)
+
+    if (!restaurant) {
+        return notFound()
+    }
+
     const product = await getProductById(productId)
 
     if (!product) {
         return notFound()
     }
 
+    if (restaurant.slug.toUpperCase() !== slug.toUpperCase()) {
+        return notFound()
+    }
+
     return (
-        <div>
+        <div className="flex h-full flex-col">
             <ProductHeader product={product} />
-            <h3>Pagina de produtos</h3>
-            <p>{productId}</p>
-            <p>{slug}</p>
+            <ProductDetails restaurant={restaurant} product={product} />
         </div>
     )
 }
