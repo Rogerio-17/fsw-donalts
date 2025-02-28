@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import { CartProvider } from "./[slug]/menu/context/cart";
 
 export const metadata: Metadata = {
   title: "FSW Donalds",
@@ -21,7 +22,9 @@ export default function RootLayout({
       <body
         className={`${poppins.className} antialiased`}
       >
-        {children}
+        <CartProvider>
+          {children}
+        </CartProvider>
       </body>
     </html>
   );

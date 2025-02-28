@@ -5,7 +5,9 @@ import { formatCurrency } from "@/utils/format-currency"
 import { Product, Restaurant } from "@prisma/client"
 import { ChefHatIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 import Image from "next/image"
-import { useState } from "react"
+import { useContext, useState } from "react"
+import { CartContext } from "../../context/cart"
+import { CartSheet } from "../../components/cart-sheet"
 
 interface ProductDetailsProps {
     restaurant: Pick<Restaurant, "name" | "avatarImageUrl">
@@ -13,6 +15,7 @@ interface ProductDetailsProps {
 }
 
 export function ProductDetails({ product, restaurant }: ProductDetailsProps) {
+    const { toggleCart } = useContext(CartContext)
     const [quantity, setQuantity] = useState<number>(1)
 
     function handleDecreaseQuantity() {
@@ -29,87 +32,95 @@ export function ProductDetails({ product, restaurant }: ProductDetailsProps) {
         setQuantity((prev) => prev + 1)
     }
 
+    function handleAddToCart() {
+        toggleCart()
+    }
+
     return (
-        <div className="relative z-50 mt-[1.5rem] rounded-t-3xl p-5 flex flex-auto flex-col overflow-hidden">
-            <div className="flex-auto overflow-hidden">
-                {/* RESTAURANTE */}
-                <div className="flex items-center gap-1.5">
-                    <Image
-                        src={restaurant.avatarImageUrl}
-                        alt={restaurant.name}
-                        width={16}
-                        height={16}
-                        className="rounded-full"
-                    />
+        <>
+            <div className="relative z-50 mt-[1.5rem] rounded-t-3xl p-5 flex flex-auto flex-col overflow-hidden">
+                <div className="flex-auto overflow-hidden">
+                    {/* RESTAURANTE */}
+                    <div className="flex items-center gap-1.5">
+                        <Image
+                            src={restaurant.avatarImageUrl}
+                            alt={restaurant.name}
+                            width={16}
+                            height={16}
+                            className="rounded-full"
+                        />
 
-                    <p className="text-xs text-muted-foreground">
-                        {restaurant.name}
-                    </p>
-                </div>
+                        <p className="text-xs text-muted-foreground">
+                            {restaurant.name}
+                        </p>
+                    </div>
 
-                {/* NOME DO PRODUTO */}
-                <h2 className="mt-1 text-xl font-semibold">
-                    {product.name}
-                </h2>
+                    {/* NOME DO PRODUTO */}
+                    <h2 className="mt-1 text-xl font-semibold">
+                        {product.name}
+                    </h2>
 
-                {/* PREÇO E QUANTIDADE */}
-                <div className="flex items-center justify-between mt-3">
-                    <h3 className="text-xl font-semibold">
+                    {/* PREÇO E QUANTIDADE */}
+                    <div className="flex items-center justify-between mt-3">
+                        <h3 className="text-xl font-semibold">
+                            {
+                                formatCurrency(product.price)
+                            }
+                        </h3>
+
+                        <div className="flex items-center gap-3 text-center">
+                            <Button
+                                onClick={handleDecreaseQuantity}
+                                variant="outline"
+                                className="h-8 w-8 rounded-xl"
+                            >
+                                <ChevronLeftIcon />
+                            </Button>
+                            <p className="w-4">{quantity}</p>
+                            <Button
+                                onClick={handleIncreaseQuantity}
+                                variant="destructive"
+                                className="h-8 w-8 rounded-xl"
+                            >
+                                <ChevronRightIcon />
+                            </Button>
+                        </div>
+                    </div>
+
+                    <ScrollArea className="h-full">
+                        {/* SOBRE */}
+                        <div className="mt-6 space-y-3">
+                            <h4 className="font-semibold">Sobre</h4>
+                            <p className="text-sm text-muted-foreground">{product.description}</p>
+                        </div>
+
+                        {/* INGREDIENTES */}
                         {
-                            formatCurrency(product.price)
+                            product.ingredients.length > 0 && (
+                                <div className="mt-6 space-y-3">
+                                    <div className="flex items-center gap-1">
+                                        <ChefHatIcon size={18} />
+                                        <h4 className="font-semibold">Ingredientes</h4>
+                                    </div>
+                                    <ul className="list-disc px-5 text-sm text-muted-foreground">
+                                        {
+                                            product.ingredients.map((ingredient, index) => (
+                                                <li key={index} className="text-sm text-muted-foreground">{ingredient}</li>
+                                            ))
+                                        }
+                                    </ul>
+                                </div>
+                            )
                         }
-                    </h3>
-
-                    <div className="flex items-center gap-3 text-center">
-                        <Button
-                            onClick={handleDecreaseQuantity}
-                            variant="outline"
-                            className="h-8 w-8 rounded-xl"
-                        >
-                            <ChevronLeftIcon />
-                        </Button>
-                        <p className="w-4">{quantity}</p>
-                        <Button
-                            onClick={handleIncreaseQuantity}
-                            variant="destructive"
-                            className="h-8 w-8 rounded-xl"
-                        >
-                            <ChevronRightIcon />
-                        </Button>
-                    </div>
+                    </ScrollArea>
                 </div>
 
-                <ScrollArea className="h-full">
-                    {/* SOBRE */}
-                    <div className="mt-6 space-y-3">
-                        <h4 className="font-semibold">Sobre</h4>
-                        <p className="text-sm text-muted-foreground">{product.description}</p>
-                    </div>
-
-                    {/* INGREDIENTES */}
-                    {
-                        product.ingredients.length > 0 && (
-                            <div className="mt-6 space-y-3">
-                                <div className="flex items-center gap-1">
-                                    <ChefHatIcon size={18} />
-                                    <h4 className="font-semibold">Ingredientes</h4>
-                                </div>
-                                <ul className="list-disc px-5 text-sm text-muted-foreground">
-                                    {
-                                        product.ingredients.map((ingredient, index) => (
-                                            <li key={index} className="text-sm text-muted-foreground">{ingredient}</li>
-                                        ))
-                                    }
-                                </ul>
-                            </div>
-                        )
-                    }
-                </ScrollArea>
+                <Button onClick={handleAddToCart} className="mt-2 w-full rounded-full">
+                    Adicionar à sacola
+                </Button>
             </div>
 
-            <Button className="mt-2 w-full rounded-full ">
-                Adicionar à sacola
-            </Button>
-        </div>
+            <CartSheet />
+        </>
     )
 }
