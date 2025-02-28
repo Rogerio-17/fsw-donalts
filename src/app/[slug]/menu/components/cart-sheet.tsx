@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { CartContext } from "../context/cart";
 
 export function CartSheet() {
-    const { toggleCart, isOpen } = useContext(CartContext)
+    const { toggleCart, isOpen, products } = useContext(CartContext)
 
     return (
         <Sheet open={isOpen} onOpenChange={toggleCart}>
@@ -12,6 +12,15 @@ export function CartSheet() {
                     <SheetTitle>Sacola</SheetTitle>
                     <SheetDescription>desc</SheetDescription>
                 </SheetHeader>
+
+                {
+                    products.map((product) => (
+                        <div key={product.id}>
+                            <p>{product.name}</p>
+                            <p>{product.quantity}</p>
+                        </div>
+                    ))
+                }
             </SheetContent>
         </Sheet>
     )
