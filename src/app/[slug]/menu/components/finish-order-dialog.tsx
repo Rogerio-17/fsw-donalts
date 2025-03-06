@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2Icon } from "lucide-react";
 import { useParams, useSearchParams } from "next/navigation";
-import { useContext, useState } from "react";
+import { useContext, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -29,6 +29,9 @@ import { PatternFormat } from "react-number-format";
 import { Input } from "@/components/ui/input";
 import { CartContext } from "../context/cart";
 import { isValidCpf } from "@/utils/cpf";
+import { createOrder } from "../actions/create-order";
+import { ConsumptionMethod } from "@prisma/client";
+import { toast } from "sonner";
 
 const formSchema = z.object({
     name: z.string().trim().min(1, {
@@ -53,7 +56,12 @@ interface FinishOrderDialogProps {
 }
 
 export function FinishOrderDialog({ onOpenChange, open }: FinishOrderDialogProps) {
+    const { slug } = useParams<{ slug: string }>();
+    const { products } = useContext(CartContext);
     const [isLoading] = useState(false);
+    const searchParams = useSearchParams()
+    const [isPending, startTransition] = useTransition()
+
     const form = useForm<FormSchema>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -62,8 +70,26 @@ export function FinishOrderDialog({ onOpenChange, open }: FinishOrderDialogProps
         },
         shouldUnregister: true,
     });
-    const onSubmit = async (data: FormSchema) => {
-        console.log(data);
+    async function onSubmit(data: FormSchema) {
+        const consumptionMethod = searchParams.get("consumptionMethod")
+
+        try {
+            startTransition(async () => {
+                await createOrder({
+                    customerName: data.name,
+                    customerCpf: data.cpf,
+                    consumptionMethod: consumptionMethod as ConsumptionMethod,
+                    products,
+                    slug
+                })
+
+                onOpenChange(false)
+                toast.success("Pedido finalizado com sucesso!")
+            })
+
+        } catch (error) {
+            console.error(error)
+        }
     };
 
     return (

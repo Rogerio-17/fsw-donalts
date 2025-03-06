@@ -34,3 +34,7 @@ export function isValidCpf(cpf: string) {
 
     return secondVerifier === parseInt(cpf.charAt(10));
 };
+
+export function removeCpfPunctuation(cpf: string) {
+    return cpf.replace(/\D/g, "");
+}

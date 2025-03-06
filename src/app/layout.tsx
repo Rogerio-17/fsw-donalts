@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "./[slug]/menu/context/cart";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "FSW Donalds",
@@ -24,6 +25,7 @@ export default function RootLayout({
       >
         <CartProvider>
           {children}
+          <Toaster />
         </CartProvider>
       </body>
     </html>

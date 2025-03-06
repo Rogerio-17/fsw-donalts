@@ -1,8 +1,8 @@
-import { getProductById } from "@/data/get-product-by-id"
+import { getProductById } from "@/service/get-product-by-id"
 import { notFound } from "next/navigation"
 import { ProductHeader } from "./components/product-header"
 import { ProductDetails } from "./components/product-details"
-import { getRestaurantBySlug } from "@/data/get-restaurant-by-slug"
+import { getRestaurantBySlug } from "@/service/get-restaurant-by-slug"
 
 interface ProductPageProps {
     params: Promise<{

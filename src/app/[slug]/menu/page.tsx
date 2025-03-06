@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { getRestaurantBySlug } from "@/data/get-restaurant-by-slug"
+import { getRestaurantBySlug } from "@/service/get-restaurant-by-slug"
 import { ChevronLeftIcon, ScrollTextIcon } from "lucide-react"
 import Image from "next/image"
 import { notFound } from "next/navigation"
