@@ -139,7 +139,7 @@ export function FinishOrderDialog({ onOpenChange, open }: FinishOrderDialogProps
                             <DrawerFooter>
                                 <Button
                                     type="submit"
-                                    variant="destructive"
+                                    variant="default"
                                     className="rounded-full"
                                     disabled={isPending}
                                 >
