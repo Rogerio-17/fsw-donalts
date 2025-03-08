@@ -4,8 +4,11 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Prisma } from "@prisma/client";
 import { ClockIcon } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Products } from "./products";
+import { CartContext } from "../context/cart";
+import { formatCurrency } from "@/utils/format-currency";
+import { CartSheet } from "./cart-sheet";
 
 interface RestaurantCategoriesProps {
     restaurant: Prisma.RestaurantGetPayload<{
@@ -25,6 +28,7 @@ type MenuCategoriesWithProducts = Prisma.MenuCategoryGetPayload<{
 
 export function RestaurantCategories({ restaurant }: RestaurantCategoriesProps) {
     const [selectedCategory, setSelectedCategory] = useState<MenuCategoriesWithProducts>(restaurant.MenuCategory[0])
+    const { products, total, toggleCart, totalQuantity } = useContext(CartContext)
 
     function handleCategoryClick(category: MenuCategoriesWithProducts) {
         setSelectedCategory(category)
@@ -71,6 +75,23 @@ export function RestaurantCategories({ restaurant }: RestaurantCategoriesProps) 
 
             <h3 className="px-5 pt-2 font-semibold">{selectedCategory.name}</h3>
             <Products products={selectedCategory.Product} />
+            {
+                totalQuantity > 0 && (
+                    <div className="fixed bottom-0 left-0 right-0 flex w-full items-center justify-between p-3 bg-white border-t px-5 py-3">
+                        <div>
+                            <p className="text-xs text-muted-foreground">Total dos pedidos</p>
+                            <p className="text-sm font-semibold">{formatCurrency(total)}
+                                <span className="text-xs font-normal text-muted-foreground">
+                                    /{totalQuantity} {totalQuantity <= 1 ? `item` : `items`}
+                                </span>
+                            </p>
+                        </div>
+
+                        <Button onClick={toggleCart} variant="default">Ver pedido</Button>
+                        <CartSheet />
+                    </div>
+                )
+            }
         </div>
     );
 }

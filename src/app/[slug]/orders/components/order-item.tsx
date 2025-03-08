@@ -57,7 +57,6 @@ export function OrderItem({ order }: OrderItemProps) {
                     </div>
 
                     <div>
-
                         <p className="text-[12px] font-semibold">{
                             new Date(order.createdAt).toLocaleString('pt-BR', {
                                 day: '2-digit',
