@@ -26,6 +26,9 @@ export default async function OrdersPage({ searchParams }: OdersPageProps) {
         where: {
             customerCpf: removeCpfPunctuation(cpf)
         },
+        orderBy: {
+            createdAt: 'desc'
+        },
         include: {
             restaurant: {
                 select: {

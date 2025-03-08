@@ -43,14 +43,31 @@ function getStatusLabel(status: OrderStatus) {
     return ''
 }
 
+// TODO: ADICIONAR O TEMPO MEDIO QUE O PEDIDIO DEMOROU PARA FICAR PRONTO
+
 export function OrderItem({ order }: OrderItemProps) {
     return (
         <Card>
             <CardContent className="p-5 space-y-4">
-                <div className={`w-fit text-white rounded-full px-2 py-1 text-xs font-semibold
+                <div className="flex justify-between items-center">
+                    <div className={`w-fit text-white rounded-full px-2 py-1 text-xs font-semibold
                     ${order.status === OrderStatus.FINISHED ? 'bg-green-600 text-white' : 'bg-gray-500'}
                     `}>
-                    {getStatusLabel(order.status)}
+                        {getStatusLabel(order.status)}
+                    </div>
+
+                    <div>
+
+                        <p className="text-[12px] font-semibold">{
+                            new Date(order.createdAt).toLocaleString('pt-BR', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            }).replace(',', ' -')
+                        }</p>
+                    </div>
                 </div>
                 <div className="flex item-center gap-2">
                     <div className="relative h-5 w-5">
