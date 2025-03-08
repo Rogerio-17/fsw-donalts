@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Prisma } from "@prisma/client"
-import { ChevronLeftIcon, Scroll, ScrollTextIcon } from "lucide-react"
+import { ChevronLeftIcon, ScrollTextIcon } from "lucide-react"
 import { OrderItem } from "./order-item"
 
 interface OrdersListProps {

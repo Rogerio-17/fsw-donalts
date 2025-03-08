@@ -22,10 +22,10 @@ export const CartContext = createContext<ICartContext>({
     isOpen: false,
     products: [],
     toggleCart: () => { },
-    addProduct: (product: CartProduct) => { },
-    decreaseCartQuantity: (productId: string) => { },
-    increaseCartQuantity: (productId: string) => { },
-    removeProduct: (productId: string) => { },
+    addProduct: () => { }, // Removido 'product'
+    decreaseCartQuantity: () => { }, // Removido 'productId'
+    increaseCartQuantity: () => { }, // Removido 'productId'
+    removeProduct: () => { }, // Removido 'productId'
     total: 0,
     totalQuantity: 0,
 });

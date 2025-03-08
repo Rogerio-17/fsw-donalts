@@ -3,7 +3,7 @@ import { CartContext, CartProduct } from "../context/cart";
 import { formatCurrency } from "@/utils/format-currency";
 import { Button } from "@/components/ui/button";
 import { ChevronLeftIcon, ChevronRightIcon, TrashIcon } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 interface CartProductItemProps {
     product: CartProduct

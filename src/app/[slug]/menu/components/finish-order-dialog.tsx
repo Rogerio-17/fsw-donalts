@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2Icon } from "lucide-react";
 import { useParams, useSearchParams } from "next/navigation";
-import { useContext, useState, useTransition } from "react";
+import { useContext, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -58,7 +58,6 @@ interface FinishOrderDialogProps {
 export function FinishOrderDialog({ onOpenChange, open }: FinishOrderDialogProps) {
     const { slug } = useParams<{ slug: string }>();
     const { products } = useContext(CartContext);
-    const [isLoading] = useState(false);
     const searchParams = useSearchParams()
     const [isPending, startTransition] = useTransition()
 
@@ -142,9 +141,9 @@ export function FinishOrderDialog({ onOpenChange, open }: FinishOrderDialogProps
                                     type="submit"
                                     variant="destructive"
                                     className="rounded-full"
-                                    disabled={isLoading}
+                                    disabled={isPending}
                                 >
-                                    {isLoading && <Loader2Icon className="animate-spin" />}
+                                    {isPending && <Loader2Icon className="animate-spin" />}
                                     Finalizar
                                 </Button>
                                 <DrawerClose asChild>
