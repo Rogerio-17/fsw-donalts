@@ -2,6 +2,7 @@ import { getRestaurantBySlug } from "@/service/get-restaurant-by-slug"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 import { ConsumptionMethodOption } from "./components/consumption-method-option"
+import { ConsumptionMethodHeader } from "./components/consumption-method-header"
 
 interface RestaurantPageProps {
     params: Promise<{
@@ -21,6 +22,8 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
         <div className="h-screen flex flex-col items-center justify-center px-6 pt-24">
             {/* LOGO E TITULO */}
             <div>
+                <ConsumptionMethodHeader />
+
                 <div className="flex flex-col items-center gap-2">
                     <Image
                         src={restaurant.avatarImageUrl}
