@@ -24,8 +24,10 @@ export default function RootLayout({
         className={`${poppins.className} antialiased`}
       >
         <CartProvider>
-          {children}
-          <Toaster />
+          <main className="max-w-[640px] mx-auto">
+            {children}
+            <Toaster />
+          </main>
         </CartProvider>
       </body>
     </html>

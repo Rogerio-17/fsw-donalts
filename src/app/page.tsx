@@ -17,7 +17,7 @@ export default async function HomePage() {
     <div className="w-full h-full">
       <Header />
 
-      <div className="p-5 mt-20">
+      <div className="p-5 mt-5">
         <h1 className="text-lg font-bold text-gray-800">Restaurantes:</h1>
 
         <div className="flex flex-col gap-2">
